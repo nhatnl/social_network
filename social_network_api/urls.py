@@ -18,11 +18,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
 
+from custom_user.views import DetailUserView, DetailUserAdminView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    url(r'^account/', include('allauth.urls')),
-    url(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
+    url(r'user/', include('rest_auth.urls')),
+    path('me/', DetailUserView.as_view(),name='detail_user'),
+    path('<int:pk>', DetailUserAdminView.as_view(),name='detail_user_admin'),
+    url(r'^user/registration/', include('custom_user.urls')),
 ]

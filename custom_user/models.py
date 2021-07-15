@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 from .managers import CustomUserManager
+from social_network_api import settings
 
 class CustomUser(AbstractUser):
     username = None
@@ -17,4 +18,3 @@ class CustomUser(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
-

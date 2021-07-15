@@ -1,9 +1,7 @@
 
-from enum import unique
-from django.db.models import fields
 from rest_framework import serializers
 
-from .validate_class import AgeAtLeast18
+from .validate_class import AgeAtLeast18, PasswordValidation
 from .models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
     age = serializers.IntegerField()
     class Meta:
         model = CustomUser
-        validators = [AgeAtLeast18()]
+        validators = [AgeAtLeast18(), PasswordValidation()]
         fields = ['email', 'first_name', 'age', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
@@ -44,4 +42,10 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['password'])
         user.save()
         return user
-    
+
+
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+class VerifyEmailSerializer(serializers.Serializer):
+    key = serializers.CharField()
