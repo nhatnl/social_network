@@ -5,9 +5,10 @@ from .validate_class import AgeAtLeast18, PasswordValidation
 from .models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(max_length=100),
-    first_name = serializers.CharField(),
+    email = serializers.EmailField(max_length=100)
+    first_name = serializers.CharField()
     age = serializers.IntegerField()
+
     class Meta:
         model = CustomUser
         validators = [AgeAtLeast18(), PasswordValidation()]
@@ -27,6 +28,15 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+    
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.age = validated_data.get('agr', instance.age)
+        instance.save()
+        return instance
+
     def save(self, request):
         # email=request.data['email'],
         # first_name=request.data['first_name'],
@@ -49,3 +59,7 @@ class EmailSerializer(serializers.Serializer):
 
 class VerifyEmailSerializer(serializers.Serializer):
     key = serializers.CharField()
+
+# class ChangePasswordSerializer(serializers.Serializer):
+#     password = serializers.CharField()
+#     password_1

@@ -18,3 +18,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self) -> str:
         return self.email
+    
+    def __repr__(self) -> str:
+        return self.email

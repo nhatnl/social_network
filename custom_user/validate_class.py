@@ -17,7 +17,7 @@ class AgeAtLeast18:
 
     def __call__(self, attrs):
         if attrs[self.age_field]<18:
-            message = self.message.format(age=self.age_field)
+            message = self.message.format(age=attrs[self.age_field])
             raise serializers.ValidationError(message, code='age_under_18')
 
 class PasswordValidation:
@@ -35,3 +35,9 @@ class PasswordValidation:
             message = self.message
             raise serializers.ValidationError(message, code='password_invalid')
 
+    def validate(self, password, user=None):
+        if re.fullmatch('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$', password) is None:
+            message = self.message
+            raise serializers.ValidationError(message, code='password_invalid')
+    def get_help_text(self):
+        return _('Your Password must have number, alpha ...')
